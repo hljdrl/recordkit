@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.weyye.hipermission">
+
+
+    <application>
+
+        <activity
+            android:name="me.weyye.hipermission.PermissionActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/PermissionThemeDialog" />
+
+    </application>
+
+
+</manifest>

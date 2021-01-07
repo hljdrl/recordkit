@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">recordKit</string>
+
+
+
+    <string name="permission_mic">麦克风</string>
+    <string name="permission_storage">存储</string>
+    <string name="permission_phone" >电话</string>
+
+</resources>

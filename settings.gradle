@@ -1,0 +1,3 @@
+include ':lib_recordkit'
+include ':lib_permission'
+include ':app'
