@@ -92,6 +92,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 recordScreen.startRecord(this, recordFile);
                 btn_mr_stop.setEnabled(true);
                 btn_mr_start.setEnabled(false);
+                tv_mr_result.setText(recordFile);
             }
         } else if (id == R.id.btn_mr_stop) {
             if (recordScreen.isRecording()) {
@@ -100,6 +101,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 recordScreen.release();
                 btn_mr_stop.setEnabled(false);
                 btn_mr_start.setEnabled(true);
+                //--------------------------------------------------------
+                File extFile = getExternalCacheDir();
+                StringBuilder name = new StringBuilder("record_screen_");
+                name.append(System.currentTimeMillis());
+                name.append(".mp4");
+                File saveFile = new File(extFile, name.toString());
+                recordFile = saveFile.toString();
             }
         }
     }

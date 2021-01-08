@@ -2,6 +2,7 @@ package arch.record.kit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.projection.MediaProjection;
 
 public abstract class IRecordScreen {
 
@@ -27,6 +28,7 @@ public abstract class IRecordScreen {
 
     public IRecordScreen() {
     }
+
     protected abstract boolean hasRecordPermission();
 
     protected abstract void startRecordPermission(Activity activity);
@@ -35,11 +37,13 @@ public abstract class IRecordScreen {
 
     protected abstract boolean isPrepare();
 
+    abstract void setupMediaProject(MediaProjection mediaProjection);
+
     protected abstract void prepare(String saveFile);
 
     public abstract String getRecordFile();
 
-    public abstract void startRecord(Activity activity,String saveFile);
+    public abstract void startRecord(Activity activity, String saveFile);
 
     public abstract void stopRecord();
 

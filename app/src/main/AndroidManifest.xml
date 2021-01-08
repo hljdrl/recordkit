@@ -41,7 +41,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Recordkit"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HomeActivity">
+        <activity
+            android:name=".HomeActivity"
+            android:configChanges="orientation|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

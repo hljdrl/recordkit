@@ -2,6 +2,7 @@ package arch.record.kit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.projection.MediaProjection;
 
 public class MediaMuxerRecordScreen extends IRecordScreen {
 
@@ -23,6 +24,11 @@ public class MediaMuxerRecordScreen extends IRecordScreen {
     @Override
     protected boolean isPrepare() {
         return false;
+    }
+
+    @Override
+    void setupMediaProject(MediaProjection mediaProjection) {
+
     }
 
     @Override

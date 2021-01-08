@@ -25,7 +25,7 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
     private MediaProjection mMediaProjection;
     private VirtualDisplay mVirtualDisplay;
     private final int REQUEST_CODE_RECORD_PERMISSION = 400;
-
+    private Context mContext;
     public MediaRecorderScreen() {
         L.i(TAG, "new MediaRecorderScreen() Version=", Version);
         recorder = new MediaRecorder();
@@ -53,14 +53,20 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_RECORD_PERMISSION) {
-            mMediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-            //
-            if (!isPrepare()) {
-                prepare(getRecordFile());
+//            mMediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
+            if(!isRecording()){
+                ScreenRecorder.startScreenService(mContext,resultCode,data);
             }
-            recorder.start();
-            stateRecording = true;
         }
+    }
+    @Override
+    void setupMediaProject(MediaProjection mediaProjection) {
+        this.mMediaProjection = mediaProjection;
+        if (!isPrepare()) {
+            prepare(getRecordFile());
+        }
+        recorder.start();
+        stateRecording = true;
     }
 
     @Override
@@ -74,6 +80,9 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
         mFile = saveFile;
         //*******设置顺序-非常重要*******
         //*******设置顺序-非常重要*******
+        if(recorder==null){
+            recorder = new MediaRecorder();
+        }
         //音频载体
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         //视频载体
@@ -127,6 +136,9 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
     @Override
     public void startRecord(Activity activity, String saveFile) {
         L.i(TAG, "startRecord");
+        if(mContext==null){
+            mContext = activity.getApplicationContext();
+        }
         if (!stateRecording) {
             mFile = saveFile;
             if (!hasRecordPermission()) {
@@ -148,6 +160,15 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
             recorder.stop();
             stateRecording = false;
         }
+        if(mVirtualDisplay!=null){
+            mVirtualDisplay.release();
+            mVirtualDisplay = null;
+        }
+        if(mMediaProjection!=null){
+            mMediaProjection.stop();
+            mMediaProjection = null;
+        }
+        mContext.stopService(new Intent(mContext,ScreenRecorder.class));
     }
 
     @Override
@@ -174,6 +195,8 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
         statePrepare = false;
         stateRecording = false;
         mFile = null;
+        recorder = null;
+        mMediaProjection=null;
     }
 
     @Override
