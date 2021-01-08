@@ -16,7 +16,8 @@ import java.io.File;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import arch.record.kit.IRecordScreen;
-import arch.record.kit.MediaRecorderImpl;
+import arch.record.kit.L;
+import arch.record.kit.MediaRecorderScreen;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_mr_start;
@@ -24,12 +25,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_mr_result;
     private IRecordScreen recordScreen;
     private Chronometer chronometer;
+    private String recordFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        IRecordScreen.install(MediaRecorderImpl.class);
+        IRecordScreen.install(MediaRecorderScreen.class);
         //
         btn_mr_start = findViewById(R.id.btn_mr_start);
         btn_mr_stop = findViewById(R.id.btn_mr_stop);
@@ -41,10 +43,29 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         chronometer.start();
         btn_mr_start.setOnClickListener(this);
         btn_mr_stop.setOnClickListener(this);
-        if(recordScreen.isRecording()){
+        if (recordScreen.isRecording()) {
             btn_mr_start.setEnabled(false);
             btn_mr_stop.setEnabled(true);
             tv_mr_result.setText(recordScreen.getRecordFile());
+        }
+        File extFile = getExternalCacheDir();
+        StringBuilder name = new StringBuilder("record_screen_");
+        name.append(System.currentTimeMillis());
+        name.append(".mp4");
+        File saveFile = new File(extFile, name.toString());
+        recordFile = saveFile.toString();
+        //
+        if (!recordScreen.isRecording()) {
+            File list[] = extFile.listFiles();
+            for (File itemFile : list) {
+                if (itemFile.isFile()) {
+                    String itemName = itemFile.getName();
+                    if (itemName.startsWith("record_screen_") && itemName.endsWith(".mp4")) {
+                        itemFile.delete();
+                        L.i("record-kit", "HomeActivity del file->", itemFile.toString());
+                    }
+                }
+            }
         }
     }
 
@@ -68,48 +89,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
         if (id == R.id.btn_mr_start) {
             if (!recordScreen.isRecording()) {
-                if(!recordScreen.hasRecordPermission()){
-                    recordScreen.startRecordPermission(this);
-                    return;
-                }
-                if (!recordScreen.isPrepare()) {
-                    File extFile = getExternalCacheDir();
-                    StringBuilder name = new StringBuilder("record_screen_");
-                    name.append(System.currentTimeMillis());
-                    name.append(".mp4");
-                    File saveFile = new File(extFile,name.toString());
-                    recordScreen.prepare(saveFile.toString());
-                    tv_mr_result.setText(saveFile.toString());
-                }
-                recordScreen.startRecord();
+                recordScreen.startRecord(this, recordFile);
                 btn_mr_stop.setEnabled(true);
                 btn_mr_start.setEnabled(false);
             }
         } else if (id == R.id.btn_mr_stop) {
             if (recordScreen.isRecording()) {
                 recordScreen.stopRecord();
+                recordScreen.reset();
+                recordScreen.release();
                 btn_mr_stop.setEnabled(false);
                 btn_mr_start.setEnabled(true);
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(recordScreen!=null){
-            recordScreen.onActivityResult(requestCode,resultCode,data);
-            //
-            if(!recordScreen.isRecording()){
-                if (!recordScreen.isPrepare()) {
-                    File extFile = getExternalCacheDir();
-                    StringBuilder name = new StringBuilder("record_screen_");
-                    name.append(System.currentTimeMillis());
-                    name.append(".mp4");
-                    File saveFile = new File(extFile,name.toString());
-                    recordScreen.prepare(saveFile.toString());
-                    tv_mr_result.setText(saveFile.toString());
-                }
-                recordScreen.startRecord();
+        if (recordScreen != null) {
+            recordScreen.onActivityResult(requestCode, resultCode, data);
+            if (!recordScreen.isRecording()) {
                 btn_mr_stop.setEnabled(true);
                 btn_mr_start.setEnabled(false);
             }

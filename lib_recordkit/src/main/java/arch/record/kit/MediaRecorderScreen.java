@@ -12,7 +12,12 @@ import android.util.DisplayMetrics;
 
 import java.io.IOException;
 
-public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.OnInfoListener, MediaRecorder.OnErrorListener {
+public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.OnInfoListener, MediaRecorder.OnErrorListener {
+    private final String Version = "1.0.0";
+    private int scDpi;
+    private int scWidth;
+    private int scHeight;
+    private String mFile;
     private boolean statePrepare = false;
     private boolean stateRecording = false;
     private MediaRecorder recorder;
@@ -21,8 +26,8 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
     private VirtualDisplay mVirtualDisplay;
     private final int REQUEST_CODE_RECORD_PERMISSION = 400;
 
-    public MediaRecorderImpl() {
-        L.i(TAG, "new MediaRecorderImpl()...");
+    public MediaRecorderScreen() {
+        L.i(TAG, "new MediaRecorderScreen() Version=", Version);
         recorder = new MediaRecorder();
     }
 
@@ -33,10 +38,6 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
         }
         return false;
     }
-    private int scDpi;
-    private int scWidth;
-    private int scHeight;
-    private String mFile;
     @Override
     public void startRecordPermission(Activity activity) {
         Context context = activity.getApplicationContext();
@@ -53,6 +54,12 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_RECORD_PERMISSION) {
             mMediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
+            //
+            if (!isPrepare()) {
+                prepare(getRecordFile());
+            }
+            recorder.start();
+            stateRecording = true;
         }
     }
 
@@ -77,7 +84,7 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
         recorder.setOutputFile(saveFile);
         //===========================================================
         //size
-        recorder.setVideoSize(scWidth/2, scHeight/2);
+        recorder.setVideoSize(scWidth / 2, scHeight / 2);
         //帧率
 //        recorder.setVideoFrameRate(60);
         recorder.setVideoFrameRate(30);
@@ -101,13 +108,13 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
             e.printStackTrace();
         }
 
-        if(mVirtualDisplay==null){
+        if (mVirtualDisplay == null) {
             mVirtualDisplay = mMediaProjection.createVirtualDisplay("MediaRecorder",
-                    scWidth/2, scHeight/2, scDpi,
+                    scWidth/2 , scHeight/2, scDpi,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                     recorder.getSurface(),
-                    null, null);
-        }else{
+                    new VirtualDisplayCallback(), null);
+        } else {
             mVirtualDisplay.setSurface(recorder.getSurface());
         }
     }
@@ -118,9 +125,17 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
     }
 
     @Override
-    public void startRecord() {
+    public void startRecord(Activity activity, String saveFile) {
         L.i(TAG, "startRecord");
         if (!stateRecording) {
+            mFile = saveFile;
+            if (!hasRecordPermission()) {
+                startRecordPermission(activity);
+                return;
+            }
+            if (!isPrepare()) {
+                prepare(saveFile);
+            }
             recorder.start();
             stateRecording = true;
         }
@@ -137,8 +152,8 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
 
     @Override
     public void reset() {
-        statePrepare = false;
         L.i(TAG, "reset");
+        statePrepare = false;
         recorder.reset();
     }
 
@@ -152,7 +167,7 @@ public class MediaRecorderImpl extends IRecordScreen implements MediaRecorder.On
     public void release() {
         L.i(TAG, "release");
         recorder.release();
-        if(mVirtualDisplay!=null){
+        if (mVirtualDisplay != null) {
             mVirtualDisplay.release();
             mVirtualDisplay = null;
         }

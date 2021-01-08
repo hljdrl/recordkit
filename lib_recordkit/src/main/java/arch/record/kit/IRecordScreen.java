@@ -6,7 +6,7 @@ import android.content.Intent;
 public abstract class IRecordScreen {
 
     private OnRecordListener onRecordListener;
-    public final String TAG = "IRecord";
+    public static final String TAG = "IRecord";
     private static IRecordScreen INSTANCE = null;
 
     public static final IRecordScreen getInstance() {
@@ -27,17 +27,19 @@ public abstract class IRecordScreen {
 
     public IRecordScreen() {
     }
-    public abstract boolean hasRecordPermission();
+    protected abstract boolean hasRecordPermission();
 
-    public abstract void startRecordPermission(Activity activity);
+    protected abstract void startRecordPermission(Activity activity);
 
     public abstract void onActivityResult(int requestCode, int resultCode, Intent data);
 
-    public abstract boolean isPrepare();
+    protected abstract boolean isPrepare();
 
-    public abstract void prepare(String saveFile);
+    protected abstract void prepare(String saveFile);
+
     public abstract String getRecordFile();
-    public abstract void startRecord();
+
+    public abstract void startRecord(Activity activity,String saveFile);
 
     public abstract void stopRecord();
 
