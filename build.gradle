@@ -1,36 +1,35 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-    buildscript {
-        repositories {
-            google()
-            jcenter()
-            maven { url "https://jitpack.io" }
-            maven { url "https://maven.aliyun.com/repository/jcenter" }
-            maven { url "https://maven.aliyun.com/repository/google" }
-            maven { url "https://maven.aliyun.com/repository/central" }
-        }
-        dependencies {
-            classpath "com.android.tools.build:gradle:4.1.1"
-
-            // NOTE: Do not place your application dependencies here; they belong
-            // in the individual module build.gradle files
-        }
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.aliyun.com/repository/jcenter" }
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/central" }
     }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.1"
 
-    allprojects {
-        repositories {
-            google()
-            jcenter()
-            maven { url "https://jitpack.io" }
-            maven { url "https://maven.aliyun.com/repository/jcenter" }
-            maven { url "https://maven.aliyun.com/repository/google" }
-            maven { url "https://maven.aliyun.com/repository/central" }
-        }
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
+}
 
-    task clean (type: Delete) {
-        delete rootProject.buildDir
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url "https://maven.aliyun.com/repository/jcenter" }
+        maven { url "https://maven.aliyun.com/repository/google" }
+        maven { url "https://maven.aliyun.com/repository/central" }
     }
+}
 
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
 
 
 ext {
@@ -43,4 +42,8 @@ ext {
     appcompat = '1.2.0'
     glide = '4.11.0'
     json_version = '1.1.72.android'
+    //https://github.com/ksvc/KSYLive_Android
+    //ksy_version="3.0.4"
+    //ksy_version="4.2.1"
+    ksy_version = "2.4.2"
 }
