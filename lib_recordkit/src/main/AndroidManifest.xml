@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="arch.record.kit">
+    package="org.record.kit">
 
 
     <application>
         <service
-            android:name="arch.record.kit.ScreenRecorder"
+            android:name="org.record.kit.ScreenRecorder"
             android:enabled="true"
             android:foregroundServiceType="mediaProjection" />
     </application>

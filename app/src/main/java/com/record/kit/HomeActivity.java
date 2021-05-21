@@ -15,15 +15,16 @@ import java.io.File;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import arch.record.kit.IRecordScreen;
-import arch.record.kit.L;
-import arch.record.kit.MediaRecorderScreen;
+
+import org.record.kit.L;
+import org.record.kit.MediaStudio;
+import org.record.kit.MediaRecorderScreen;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn_mr_start;
     private Button btn_mr_stop;
     private TextView tv_mr_result;
-    private IRecordScreen recordScreen;
+    private MediaStudio recordScreen;
     private Chronometer chronometer;
     private String recordFile;
 
@@ -31,14 +32,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        IRecordScreen.install(MediaRecorderScreen.class);
+        MediaStudio.install(MediaRecorderScreen.class);
         //
         btn_mr_start = findViewById(R.id.btn_mr_start);
         btn_mr_stop = findViewById(R.id.btn_mr_stop);
         tv_mr_result = findViewById(R.id.tv_mr_result);
         chronometer = findViewById(R.id.time);
         //
-        recordScreen = IRecordScreen.getInstance();
+        recordScreen = MediaStudio.getInstance();
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         btn_mr_start.setOnClickListener(this);

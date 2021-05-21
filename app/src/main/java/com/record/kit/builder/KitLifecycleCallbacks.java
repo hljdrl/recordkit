@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import arch.record.kit.L;
+import org.record.kit.L;
 
 public class KitLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 

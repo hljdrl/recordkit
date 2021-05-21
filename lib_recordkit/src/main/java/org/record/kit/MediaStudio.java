@@ -1,20 +1,20 @@
-package arch.record.kit;
+package org.record.kit;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.projection.MediaProjection;
 
-public abstract class IRecordScreen {
+public abstract class MediaStudio {
 
     private OnRecordListener onRecordListener;
     public static final String TAG = "IRecord";
-    private static IRecordScreen INSTANCE = null;
+    private static MediaStudio INSTANCE = null;
 
-    public static final IRecordScreen getInstance() {
+    public static final MediaStudio getInstance() {
         return INSTANCE;
     }
 
-    public static final void install(Class<? extends IRecordScreen> cls) {
+    public static final void install(Class<? extends MediaStudio> cls) {
         if (INSTANCE == null) {
             try {
                 INSTANCE = cls.newInstance();
@@ -26,7 +26,21 @@ public abstract class IRecordScreen {
         }
     }
 
-    public IRecordScreen() {
+    public MediaStudio() {
+    }
+    public void handlePause(){
+    }
+    public void handleResume(){
+
+    }
+    public void handleStart(){
+
+    }
+    public  void handleStop(){
+
+    }
+    public  void handleDestroy(){
+
     }
 
     protected abstract boolean hasRecordPermission();
@@ -52,10 +66,6 @@ public abstract class IRecordScreen {
     public abstract boolean isRecording();
 
     public abstract void release();
-
-    protected final OnRecordListener getOnRecordListener() {
-        return onRecordListener;
-    }
 
     public final void setOnRecordListener(OnRecordListener onRecordListener) {
         this.onRecordListener = onRecordListener;

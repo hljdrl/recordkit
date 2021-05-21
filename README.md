@@ -4,6 +4,12 @@ android record screen  android平台屏幕录制
 暂时不支持targetSdkVersion>28设备录屏
 
 
+
+第三方库
+HiPermission https://github.com/yewei02538/HiPermission
+
+
+
 License
 -------
 

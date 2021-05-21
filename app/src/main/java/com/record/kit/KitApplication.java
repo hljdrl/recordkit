@@ -8,13 +8,14 @@ import android.net.Uri;
 import com.record.kit.builder.Kit;
 import com.record.kit.builder.KitLifecycleCallbacks;
 
-import arch.record.kit.L;
+import org.record.kit.L;
 
 public class KitApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
+        L.init(true,true,true);
         registerActivityLifecycleCallbacks(new KitLifecycleCallbacks());
     }
 
@@ -49,13 +50,13 @@ public class KitApplication extends Application {
 
     @Override
     public int checkCallingOrSelfUriPermission(Uri uri, int modeFlags) {
-        L.i(Kit.APP_TAG,"checkCallingOrSelfUriPermission->",uri," modeFlags=",modeFlags);
+        L.ii(Kit.APP_TAG,"checkCallingOrSelfUriPermission->",uri," modeFlags=",modeFlags);
         return super.checkCallingOrSelfUriPermission(uri, modeFlags);
     }
 
     @Override
     public int checkCallingUriPermission(Uri uri, int modeFlags) {
-        L.i(Kit.APP_TAG,"checkCallingUriPermission->",uri," modeFlags=",modeFlags);
+        L.ii(Kit.APP_TAG,"checkCallingUriPermission->",uri," modeFlags=",modeFlags);
         return super.checkCallingUriPermission(uri, modeFlags);
     }
 

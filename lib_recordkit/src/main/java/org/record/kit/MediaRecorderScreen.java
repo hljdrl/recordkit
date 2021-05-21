@@ -1,4 +1,4 @@
-package arch.record.kit;
+package org.record.kit;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.util.DisplayMetrics;
 
 import java.io.IOException;
 
-public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.OnInfoListener, MediaRecorder.OnErrorListener {
+public class MediaRecorderScreen extends MediaStudio implements MediaRecorder.OnInfoListener, MediaRecorder.OnErrorListener {
     private final String Version = "1.0.0";
     private int scDpi;
     private int scWidth;
@@ -155,7 +155,7 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
 
     @Override
     public void stopRecord() {
-        L.i(TAG, "stopRecord->", stateRecording);
+        L.ii(TAG, "stopRecord->", stateRecording);
         if (stateRecording) {
             recorder.stop();
             stateRecording = false;
@@ -180,7 +180,7 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
 
     @Override
     public boolean isRecording() {
-        L.i(TAG, "isRecording=", stateRecording);
+        L.ii(TAG, "isRecording=", stateRecording);
         return stateRecording;
     }
 
@@ -201,11 +201,11 @@ public class MediaRecorderScreen extends IRecordScreen implements MediaRecorder.
 
     @Override
     public void onInfo(MediaRecorder mr, int what, int extra) {
-        L.i(TAG, "onInfo->what=", what, " extra=", extra);
+        L.ii(TAG, "onInfo->what=", what, " extra=", extra);
     }
 
     @Override
     public void onError(MediaRecorder mr, int what, int extra) {
-        L.i(TAG, "onInfo->what=", what, " extra=", extra);
+        L.ii(TAG, "onInfo->what=", what, " extra=", extra);
     }
 }

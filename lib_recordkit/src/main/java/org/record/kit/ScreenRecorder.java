@@ -1,4 +1,4 @@
-package arch.record.kit;
+package org.record.kit;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -27,7 +27,7 @@ public class ScreenRecorder extends Service {
         return null;
     }
 
-    private IRecordScreen recordScreen;
+    private MediaStudio recordScreen;
     private MediaProjection mMediaProjection;
     private MediaProjectionManager mediaProjectionManager;
     private String CHANNEL_ID="222";
@@ -60,7 +60,7 @@ public class ScreenRecorder extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (recordScreen == null) {
-            recordScreen = IRecordScreen.getInstance();
+            recordScreen = MediaStudio.getInstance();
         }
         if (mMediaProjection == null) {
             int mResultCode = intent.getIntExtra("code", -1);

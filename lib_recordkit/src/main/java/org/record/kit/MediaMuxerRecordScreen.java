@@ -1,10 +1,10 @@
-package arch.record.kit;
+package org.record.kit;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.projection.MediaProjection;
 
-public class MediaMuxerRecordScreen extends IRecordScreen {
+public class MediaMuxerRecordScreen extends MediaStudio {
 
     @Override
     protected boolean hasRecordPermission() {
